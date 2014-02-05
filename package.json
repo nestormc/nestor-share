@@ -1,0 +1,16 @@
+{
+  "name": "nestor-share",
+  "version": "0.0.1",
+  "description": "Resource sharing plugin for nestor",
+  "main": "share.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:nestormc/nestor-share.git"
+  },
+  "author": "Nicolas Joyard <joyard.nicolas@gmail.com>",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "zipstream": "red56/node-zipstream"
+  }
+}
