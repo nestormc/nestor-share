@@ -279,6 +279,7 @@ function sharePlugin(nestor) {
 
 	rest.mongoose("shares", Share)
 		.set("key", "shortId")
+		.set("postResponse", true)
 		.set("toObject", {
 			virtuals: true,
 
@@ -381,8 +382,8 @@ function sharePlugin(nestor) {
 
 sharePlugin.manifest = {
 	name: "share",
-	description: "Share resources"
-	// clientDir: __dirname + "/client"
+	description: "Share resources",
+	clientDir: __dirname + "/client"
 };
 
 
