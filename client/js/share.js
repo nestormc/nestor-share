@@ -112,6 +112,7 @@ function(ui, router, resource, popupTemplate, settingsTemplate) {
 				};
 
 				popupRendered.update();
+				popupView.resize();
 			})
 			.otherwise(function(err) {
 				popupView.hide();
