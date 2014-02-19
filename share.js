@@ -383,7 +383,11 @@ function sharePlugin(nestor) {
 sharePlugin.manifest = {
 	name: "share",
 	description: "Share resources",
-	clientDir: __dirname + "/client"
+	client: {
+		build: {
+			base: __dirname + "/client"
+		}
+	}
 };
 
 
