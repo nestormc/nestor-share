@@ -14,15 +14,15 @@ define(["rest"], function(rest) {
 		},
 
 		remove: function(key) {
-			return rest.del("shares/" + key);
+			return rest.del("shares/%s", key);
 		},
 
 		enable: function(key) {
-			return rest.patch("shares/" + key, { disabled: false });
+			return rest.patch("shares/%s", key, { disabled: false });
 		},
 
 		disable: function(key) {
-			return rest.patch("shares/" + key, { disabled: true });
+			return rest.patch("shares/%s", key, { disabled: true });
 		}
 	};
 });
