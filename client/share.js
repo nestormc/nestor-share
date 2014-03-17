@@ -20,13 +20,15 @@ function(ui, router, resource, popupTemplate, settingsTemplate) {
 		/* Setup settings pane */
 
 		var settingsView = ui.view("share-settings");
-		var settingsRendered = settingsTemplate.render({ shares: [] });
+		var settingsContext = { shares: [] };
+		var settingsRendered = settingsTemplate.render(settingsContext);
 
 		settingsView.appendChild(settingsRendered);
 
 		function updateSettings() {
 			return resource.get().then(function(shares) {
-				settingsRendered.update({ shares: shares._items });
+				settingsContext.shares = shares._items;
+				settingsRendered.update();
 			});
 		}
 
