@@ -12,8 +12,8 @@ function(ui, router, resource, popupTemplate, settingsTemplate) {
 	 */
 
 	var popupView;
+	var popupForm;
 	var popupRendered;
-	var popupContext = { loading: true };
 
 
 	ui.started.add(function() {
@@ -59,14 +59,32 @@ function(ui, router, resource, popupTemplate, settingsTemplate) {
 		/* Setup new share popup */
 
 		popupView = ui.view("new-share");
-		popupRendered = popupTemplate.render(popupContext);
+		popupForm = ui.helpers.form({
+			submitLabel: "Share",
+			cancelLabel: "Cancel",
+
+			onSubmit: function(values) {
+				resource.enable(values.shortId);
+				popupView.hide();
+			},
+
+			onCancel: function() {
+				resource.remove(popupForm.getValues().shortId);
+				popupView.hide();
+			},
+
+			fields: [
+				{ type: "text", name: "description", label: "Shared item", value: "", readonly: true },
+				{ type: "text", name: "url", label: "Share URL", value: "", readonly: true },
+				{ type: "hidden", name: "shortId", value: "", readonly: true }
+			]
+		});
+
+
+		popupRendered = popupTemplate.render({ form: popupForm });
 		popupView.appendChild(popupRendered);
 
 		popupView.undisplayed.add(function() {
-			popupContext.loading = true;
-			popupContext.share = null;
-			popupContext.behaviour = null;
-
 			popupRendered.update();
 		});
 	});
@@ -92,28 +110,21 @@ function(ui, router, resource, popupTemplate, settingsTemplate) {
 
 		public: function shareResource(provider, id, description) {
 			popupView.show();
+			popupForm.setValues({
+				description: description,
+				url: "Generating URL..."
+			});
+
+			setTimeout(function() { popupView.resize(); }, 0);
 
 			resource.add(provider, id, description)
 			.then(function(share) {
-				popupContext.loading = false;
-				popupContext.share = share;
-				popupContext.behaviour = {
-					".cancel": {
-						"click": function() {
-							popupView.hide();
-							resource.remove(share.shortId);
-						}
-					},
+				popupForm.setValues({
+					description: description,
+					url: share.url,
+					shortId: share.shortId
+				});
 
-					".share": {
-						"click": function() {
-							popupView.hide();
-							resource.enable(share.shortId);
-						}
-					}
-				};
-
-				popupRendered.update();
 				popupView.resize();
 			})
 			.otherwise(function(err) {
