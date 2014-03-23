@@ -2,8 +2,8 @@
 /*global define */
 
 define(
-["ui", "router", "resource", "ist!templates/new-share", "ist!templates/settings"],
-function(ui, router, resource, popupTemplate, settingsTemplate) {
+["ui", "router", "resource", "ist!templates/settings"],
+function(ui, router, resource, settingsTemplate) {
 	"use strict";
 
 
@@ -13,7 +13,6 @@ function(ui, router, resource, popupTemplate, settingsTemplate) {
 
 	var popupView;
 	var popupForm;
-	var popupRendered;
 
 
 	ui.started.add(function() {
@@ -60,6 +59,8 @@ function(ui, router, resource, popupTemplate, settingsTemplate) {
 
 		popupView = ui.view("new-share");
 		popupForm = ui.helpers.form({
+			title: "Share resource",
+
 			submitLabel: "Share",
 			cancelLabel: "Cancel",
 
@@ -80,13 +81,7 @@ function(ui, router, resource, popupTemplate, settingsTemplate) {
 			]
 		});
 
-
-		popupRendered = popupTemplate.render({ form: popupForm });
-		popupView.appendChild(popupRendered);
-
-		popupView.undisplayed.add(function() {
-			popupRendered.update();
-		});
+		popupView.appendChild(popupForm);
 	});
 
 
@@ -115,7 +110,7 @@ function(ui, router, resource, popupTemplate, settingsTemplate) {
 				url: "Generating URL..."
 			});
 
-			setTimeout(function() { popupView.resize(); }, 0);
+			popupView.resize();
 
 			resource.add(provider, id, description)
 			.then(function(share) {
