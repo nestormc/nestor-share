@@ -16,6 +16,10 @@ function(ui, router, resource, settingsTemplate) {
 
 
 	ui.started.add(function() {
+		if (!ui.hasRight("nestor:shares")) {
+			return;
+		}
+
 		/* Setup settings pane */
 
 		var settingsView = ui.view("share-settings");
@@ -92,6 +96,7 @@ function(ui, router, resource, settingsTemplate) {
 	return {
 		views: {
 			"share-settings": {
+				ifRight: "nestor:shares",
 				type: "settings",
 				title: "Shares",
 				description: "Manage shared resources",
@@ -99,11 +104,16 @@ function(ui, router, resource, settingsTemplate) {
 			},
 
 			"new-share": {
+				ifRight: "nestor:shares",
 				type: "popup"
 			}
 		},
 
 		public: function shareResource(provider, id, description) {
+			if (!ui.hasRight("nestor:shares")) {
+				return;
+			}
+
 			popupView.show();
 			popupForm.setValues({
 				description: description,
