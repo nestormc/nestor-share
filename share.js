@@ -384,6 +384,7 @@ sharePlugin.manifest = {
 	name: "share",
 	description: "Share resources",
 	client: {
+		public:  __dirname + "/client/public",
 		build: {
 			base: __dirname + "/client"
 		}

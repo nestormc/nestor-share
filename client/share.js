@@ -100,7 +100,7 @@ function(ui, router, resource, settingsTemplate) {
 				type: "settings",
 				title: "Shares",
 				description: "Manage shared resources",
-				icon: "share"
+				icon: "share:share"
 			},
 
 			"new-share": {

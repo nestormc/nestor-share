@@ -18,7 +18,7 @@ ul.content-list
 				.list-item-subtitle
 					@if provider === "music"
 						span.icon
-							@icon "nocover"
+							@icon "music:nocover"
 					a[target=_blank][href={{ url }}] "download link"
 
 
