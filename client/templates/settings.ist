@@ -16,9 +16,8 @@ ul.content-list
 
 			.list-item-body
 				.list-item-subtitle
-					@if provider === "music"
-						span.icon
-							@icon "music:nocover"
+					span.icon
+						@icon icon
 					a[target=_blank][href={{ url }}] "download link"
 
 				.list-item-actions

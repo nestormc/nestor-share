@@ -6,6 +6,8 @@ define(
 function(ui, router, resource, settingsTemplate) {
 	"use strict";
 
+	var icons = {};
+
 
 	/*!
 	 * Fill views when UI starts
@@ -31,6 +33,22 @@ function(ui, router, resource, settingsTemplate) {
 		function updateSettings() {
 			return resource.get().then(function(shares) {
 				settingsContext.shares = shares._items;
+
+				shares._items.forEach(function(item) {
+					var icon = "share:share";
+
+					if (item.provider in icons) {
+						var picons = icons[item.provider];
+						Object.keys(picons).forEach(function(i) {
+							if (item.resource.match(picons[i])) {
+								icon = i;
+							}
+						});
+					}
+
+					item.icon  = icon;
+				});
+
 				settingsRendered.update();
 			});
 		}
@@ -109,33 +127,39 @@ function(ui, router, resource, settingsTemplate) {
 			}
 		},
 
-		public: function shareResource(provider, id, description) {
-			if (!ui.hasRight("nestor:shares")) {
-				return;
-			}
+		public: {
+			shareResource: function(provider, id, description) {
+				if (!ui.hasRight("nestor:shares")) {
+					return;
+				}
 
-			popupView.show();
-			popupForm.setValues({
-				description: description,
-				url: "Generating URL..."
-			});
-
-			popupView.resize();
-
-			resource.add(provider, id, description)
-			.then(function(share) {
+				popupView.show();
 				popupForm.setValues({
 					description: description,
-					url: share.url,
-					shortId: share.shortId
+					url: "Generating URL..."
 				});
 
 				popupView.resize();
-			})
-			.otherwise(function(err) {
-				popupView.hide();
-				ui.error("Cannot share resource", err.message);
-			});
+
+				resource.add(provider, id, description)
+				.then(function(share) {
+					popupForm.setValues({
+						description: description,
+						url: share.url,
+						shortId: share.shortId
+					});
+
+					popupView.resize();
+				})
+				.otherwise(function(err) {
+					popupView.hide();
+					ui.error("Cannot share resource", err.message);
+				});
+			},
+
+			setShareIcons: function(provider, picons) {
+				icons[provider] = picons;
+			}
 		}
 	};
 });
